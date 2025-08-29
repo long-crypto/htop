@@ -111,6 +111,11 @@ jobs:
       run: make -k
     - name: Distcheck
       run: make distcheck DISTCHECK_CONFIGURE_FLAGS='--enable-static --enable-werror --enable-openvz --enable-vserver --enable-ancient-vserver --enable-unicode --disable-hwloc --disable-delayacct --enable-sensors --enable-capabilities'
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ matrix.file }}
+        path: htop
 
   build-ubuntu-latest-pcp:
     # we want PCP v5.2.3+
