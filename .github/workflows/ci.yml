@@ -106,11 +106,11 @@ jobs:
     - name: Bootstrap
       run: ./autogen.sh
     - name: Configure
-      run: ./configure --enable-static --enable-werror --enable-openvz --enable-vserver --enable-ancient-vserver --enable-unicode --disable-hwloc --disable-delayacct --enable-sensors --enable-capabilities || ( cat config.log; exit 1; )
+      run: ./configure --enable-static --enable-werror  --enable-unicode --disable-hwloc --disable-delayacct  --enable-capabilities || ( cat config.log; exit 1; )
     - name: Build
       run: make -k
     - name: Distcheck
-      run: make distcheck DISTCHECK_CONFIGURE_FLAGS='--enable-static --enable-werror --enable-openvz --enable-vserver --enable-ancient-vserver --enable-unicode --disable-hwloc --disable-delayacct --enable-sensors --enable-capabilities'
+      run: make distcheck DISTCHECK_CONFIGURE_FLAGS='--enable-static --enable-werror --enable-unicode --disable-hwloc --disable-delayacct  --enable-capabilities'
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
