@@ -92,6 +92,7 @@ typedef struct CommandLineSettings_ {
    bool enableMouse;
 #endif
    bool treeView;
+   int stableTreeView;
    bool allowUnicode;
    bool highlightChanges;
    int highlightDelaySecs;
@@ -134,6 +135,7 @@ static CommandLineStatus parseArguments(int argc, char** argv, CommandLineSettin
 #endif
       .treeView = false,
       .allowUnicode = true,
+      .stableTreeView = -1,
       .highlightChanges = false,
       .highlightDelaySecs = -1,
       .readonly = false,
@@ -162,7 +164,7 @@ static CommandLineStatus parseArguments(int argc, char** argv, CommandLineSettin
       {"no-mouse",   no_argument,         0, 'M'},
       {"no-unicode", no_argument,         0, 'U'},
       {"no-meters",  no_argument,         0, 129},
-      {"tree",       no_argument,         0, 't'},
+      {"tree",       optional_argument,   0, 't'},
       {"pid",        required_argument,   0, 'p'},
       {"filter",     required_argument,   0, 'F'},
       {"no-functionbar", no_argument,     0, 130},
@@ -175,7 +177,7 @@ static CommandLineStatus parseArguments(int argc, char** argv, CommandLineSettin
 
    int opt, opti = 0;
    /* Parse arguments */
-   while ((opt = getopt_long(argc, argv, "hVMCs:td:n:u::Up:F:H::", long_opts, &opti))) {
+   while ((opt = getopt_long(argc, argv, "hVMCs:t::d:n:u::Up:F:H::", long_opts, &opti))) {
       if (opt == EOF)
          break;
 
@@ -415,6 +417,8 @@ int CommandLine_run(int argc, char** argv) {
 #endif
    if (flags.treeView)
       settings->ss->treeView = true;
+   if (flags.stableTreeView != -1)
+      settings->ss->stableTreeView = flags.stableTreeView;
    if (flags.highlightChanges)
       settings->highlightChanges = true;
    if (flags.highlightDelaySecs != -1)
