@@ -381,6 +381,8 @@ bool Panel_onKey(Panel* this, int key) {
    assert(this != NULL);
 
    const int size = Vector_size(this->items);
+   const int availableHeight = this->h - Panel_headerHeight(this);
+   const int maxScroll = MAXIMUM(0, size - availableHeight);
 
    #define PANEL_SCROLL(amount)                                                                                     \
    do {                                                                                                             \
@@ -434,6 +436,26 @@ bool Panel_onKey(Panel* this, int key) {
 
       case KEY_WHEELDOWN:
          PANEL_SCROLL(+CRT_scrollWheelVAmount);
+         break;
+
+      case KEY_SR:
+         if (this->scrollV > 0) {
+            // keep selection within the now-visible area
+            if (this->selected < this->scrollV + availableHeight) {
+               this->scrollV--;
+               this->needsRedraw = true;
+            }
+         }
+         break;
+
+      case KEY_SF:
+         if (this->scrollV < maxScroll) {
+            // keep selection within the now-visible area
+            if (this->selected >= this->scrollV) {
+               this->scrollV++;
+               this->needsRedraw = true;
+            }
+         }
          break;
 
       case KEY_HOME:
