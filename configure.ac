@@ -7,7 +7,7 @@
 
 m4_define([htop_git_version],
    m4_normalize(m4_esyscmd([git describe --abbrev=7 --dirty --always --tags 2> /dev/null || echo ''])))
-m4_define([htop_release_version], [3.5.1-dev])
+m4_define([htop_release_version], [3.6.0-dev])
 
 # ----------------------------------------------------------------------
 # Autoconf initialization.
@@ -349,10 +349,10 @@ AC_LINK_IFELSE(
 )
 
 AC_MSG_CHECKING(for __builtin_ctz)
-AC_COMPILE_IFELSE(
+AC_LINK_IFELSE(
    [AC_LANG_PROGRAM(
       [],
-      [[__builtin_ctz(1); /* Supported in GCC 3.4 or later */]]
+      [[volatile int test_ctz = __builtin_ctz(1); (void)test_ctz; /* Supported in GCC 3.4 or later */]]
    )],
    AC_DEFINE([HAVE_BUILTIN_CTZ], 1, [Define to 1 if the compiler supports '__builtin_ctz' function.])
    AC_MSG_RESULT(yes),
@@ -454,7 +454,7 @@ if test "$my_htop_platform" = darwin; then
 fi
 
 if test "$my_htop_platform" = pcp; then
-   AC_CHECK_FUNCS([pmLookupDescs])
+   AC_CHECK_FUNCS([pmLookupDescs pmtimespecToReal pmtimevalTotimespec])
 fi
 
 if test "$my_htop_platform" = linux && test "x$enable_static" = xyes; then
